@@ -1,30 +1,40 @@
 #include <iostream>
 #include <cmath>
-#include <locale.h>
 
 int main() {
-    setlocale(LC_ALL, "RUS");
-    double width, height;
+    double a, b, c;
 
-    // Запросить размеры прямоугольника
-    std::cout << "Введите ширину прямоугольника: ";
-    std::cin >> width;
-    std::cout << "Введите длину прямоугольника: ";
-    std::cin >> height;
+    // Запросить длины сторон треугольника
+    std::cout << "Введите длину первой стороны треугольника: ";
+    std::cin >> a;
+    std::cout << "Введите длину второй стороны треугольника: ";
+    std::cin >> b;
+    std::cout << "Введите длину третьей стороны треугольника: ";
+    std::cin >> c;
 
-    // Вычислить периметр
-    double perimeter = 2 * (width + height);
+    // Проверка на существование треугольника
+    if (a + b > c && a + c > b && b + c > a) {
+        // Вычислить периметр
+        double perimeter = a + b + c;
 
-    // Вычислить площадь
-    double area = width * height;
+        // Вычислить площадь по формуле Герона
+        double s = perimeter / 2;
+        double area = std::sqrt(s * (s - a) * (s - b) * (s - c));
 
-    // Вычислить длину диагонали
-    double diagonal = std::sqrt(width * width + height * height);
+        // Проверка на равнобедренность
+        bool isIsosceles = (a == b || b == c || a == c);
 
-    // Вывести результаты
-    std::cout << "Периметр прямоугольника: " << perimeter << std::endl;
-    std::cout << "Площадь прямоугольника: " << area << std::endl;
-    std::cout << "Длина диагонали прямоугольника: " << diagonal << std::endl;
- 
+        // Вывести результаты
+        std::cout << "Периметр треугольника: " << perimeter << std::endl;
+        std::cout << "Площадь треугольника: " << area << std::endl;
+        if (isIsosceles) {
+            std::cout << "Треугольник равнобедренный." << std::endl;
+        } else {
+            std::cout << "Треугольник не равнобедренный." << std::endl;
+        }
+    } else {
+        std::cout << "Треугольник с такими сторонами не существует." << std::endl;
+    }
+
     return 0;
 }
