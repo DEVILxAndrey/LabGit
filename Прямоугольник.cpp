@@ -31,7 +31,7 @@ int main() {
     double diagonal = std::sqrt(width * width + height * height);
 
     // Вывести результаты
-    std::cout << "Периметр прямоугольника: " << perimeter << std::endl;
+    std::cout << "Периметр прямоугольника: " << perimeter << std::endl; //периметр
     std::cout << "Площадь прямоугольника: " << area << std::endl;
     std::cout << "Длина диагонали прямоугольника: " << diagonal << std::endl;
  
