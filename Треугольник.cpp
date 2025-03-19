@@ -21,13 +21,11 @@ int main() {
         double s = perimeter / 2;
         double area = std::sqrt(s * (s - a) * (s - b) * (s - c));
 
-        // Проверка на равнобедренность
-        bool isIsosceles = (a == b || b == c || a == c);
-
-        // Вывести результаты
+        // Проверка на равнобедренность и вывод результатов
         std::cout << "Периметр треугольника: " << perimeter << std::endl;
         std::cout << "Площадь треугольника: " << area << std::endl;
-        if (isIsosceles) {
+
+        if (a == b || b == c || a == c) {
             std::cout << "Треугольник равнобедренный." << std::endl;
         } else {
             std::cout << "Треугольник не равнобедренный." << std::endl;
