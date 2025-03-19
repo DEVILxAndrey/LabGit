@@ -23,7 +23,7 @@ int main() {
 
     // Вывести результаты
     std::cout << "Периметр прямоугольника: " << perimeter << std::endl;
-    std::cout << "Площадь прямоугольника: " << area << std::endl;
+    std::cout << "Площадь прямоугольника1: " << area << std::endl;
     std::cout << "Длина диагонали прямоугольника: " << diagonal << std::endl;
  
     return 0;
