@@ -1,0 +1,897 @@
+
+//Python начало
+def is_valid_date(day, month):
+    """Проверяет, является ли день (1–31) и месяц (1–12) корректными."""
+    return 1 <= day <= 31 and 1 <= month <= 12
+
+def check_number(num):
+    """Проверяет, можно ли вставить '/' в число для получения корректной даты."""
+    num_str = str(num)
+    # Если число начинается с нуля, оно недопустимо (кроме 0, но длина 1)
+    if num_str[0] == '0' and len(num_str) > 1:
+        return "NO"
+    n = len(num_str)
+    for i in range(1, n):  # Пробуем все позиции для «/»
+        day_str = num_str[:i]
+        month_str = num_str[i:]
+        # Исключаем ведущие нули только для дня
+        if day_str[0] == '0':
+            continue
+        try:
+            day = int(day_str)
+            month = int(month_str)  # Убирает ведущие нули (03 → 3)
+            if is_valid_date(day, month):
+                return "YES"
+        except ValueError:
+            continue
+    return "NO"
+
+def main():
+    """Основная функция с обработкой ввода-вывода."""
+    print("Введите целые числа через пробел (например, 3 1244 32 199):")
+    try:
+        # Чтение ввода
+        input_str = input().strip()
+        # Проверка на пустую строку или пробелы
+        if not input_str or input_str.isspace():
+            print("Ошибка: Введена пустая строка или только пробелы.")
+            return
+        # Проверка на некорректные символы
+        if not all(c.isdigit() or c.isspace() for c in input_str):
+            print("Ошибка: Ввод содержит недопустимые символы (только цифры и пробелы).")
+            return
+        # Преобразование в числа
+        numbers = list(map(int, input_str.split()))
+        if not numbers:
+            print("Ошибка: Не введено ни одного числа.")
+            return
+
+        # Обработка чисел
+        result = [check_number(num) for num in numbers]
+
+        # Формат вывода 1: строка через пробел
+        print("Результат (формат 1):", " ".join(result))
+
+        # Формат вывода 2: столбец
+        print("Результат (формат 2):")
+        for res in result:
+            print(res)
+
+    except KeyboardInterrupt:
+        print("\nПрограмма прервана пользователем.")
+    except EOFError:
+        print("\nОшибка: Ввод был неожиданно завершен.")
+    except ValueError:
+        print("\nОшибка: Введите корректные целые числа.")
+    except Exception as e:
+        print(f"\nПроизошла ошибка: {e}")
+
+if __name__ == "__main__":
+    main()
+//Python конец______________________________________________________
+
+//C++ начало
+#include <iostream>
+#include <vector>
+#include <string>
+#include <sstream>
+#include <cctype>
+
+bool is_valid_date(int day, int month) {
+    // Проверяет, является ли день (1–31) и месяц (1–12) корректными
+    return day >= 1 && day <= 31 && month >= 1 && month <= 12;
+}
+
+std::string check_number(int num) {
+    // Проверяет, можно ли вставить '/' в число для получения корректной даты
+    std::string num_str = std::to_string(num);
+    if (num_str[0] == '0' && num_str.length() > 1) {
+        return "NO";
+    }
+    int n = num_str.length();
+    for (int i = 1; i < n; ++i) {
+        std::string day_str = num_str.substr(0, i);
+        std::string month_str = num_str.substr(i);
+        if (day_str[0] == '0') {
+            continue;
+        }
+        try {
+            int day = std::stoi(day_str);
+            int month = std::stoi(month_str);
+            if (is_valid_date(day, month)) {
+                return "YES";
+            }
+        } catch (...) {
+            continue;
+        }
+    }
+    return "NO";
+}
+
+int main() {
+    std::cout << "Введите целые числа через пробел (например, 3 1244 32 199): ";
+    std::string input_str;
+    std::getline(std::cin, input_str);
+
+    // Проверка на пустую строку или пробелы
+    if (input_str.empty() || input_str.find_first_not_of(" \t\n\r") == std::string::npos) {
+        std::cout << "Ошибка: Введена пустая строка или только пробелы.\n";
+        return 1;
+    }
+
+    // Проверка на некорректные символы
+    for (char c : input_str) {
+        if (!std::isdigit(c) && !std::isspace(c)) {
+            std::cout << "Ошибка: Ввод содержит недопустимые символы (только цифры и пробелы).\n";
+            return 1;
+        }
+    }
+
+    std::vector<int> numbers;
+    std::stringstream ss(input_str);
+    int num;
+    try {
+        while (ss >> num) {
+            numbers.push_back(num);
+        }
+        if (numbers.empty()) {
+            std::cout << "Ошибка: Не введено ни одного числа.\n";
+            return 1;
+        }
+
+        std::vector<std::string> result;
+        for (int num : numbers) {
+            result.push_back(check_number(num));
+        }
+
+        // Формат 1: строка
+        std::cout << "Результат (формат 1): ";
+        for (size_t i = 0; i < result.size(); ++i) {
+            std::cout << result[i] << (i < result.size() - 1 ? " " : "\n");
+        }
+
+        // Формат 2: столбец
+        std::cout << "Результат (формат 2):\n";
+        for (const auto& res : result) {
+            std::cout << res << "\n";
+        }
+    } catch (...) {
+        std::cout << "Ошибка: Введите корректные целые числа.\n";
+        return 1;
+    }
+
+    return 0;
+}
+//C++ конец______________________________________________________
+
+//Kotlin начало
+fun isValidDate(day: Int, month: Int): Boolean {
+    // Проверяет, является ли день (1–31) и месяц (1–12) корректными
+    return day in 1..31 && month in 1..12
+}
+
+fun checkNumber(num: Int): String {
+    // Проверяет, можно ли вставить '/' в число для получения корректной даты
+    val numStr = num.toString()
+    if (numStr[0] == '0' && numStr.length > 1) {
+        return "NO"
+    }
+    val n = numStr.length
+    for (i in 1 until n) {
+        val dayStr = numStr.substring(0, i)
+        val monthStr = numStr.substring(i)
+        if (dayStr[0] == '0') {
+            continue
+        }
+        try {
+            val day = dayStr.toInt()
+            val month = monthStr.toInt()
+            if (isValidDate(day, month)) {
+                return "YES"
+            }
+        } catch (e: NumberFormatException) {
+            continue
+        }
+    }
+    return "NO"
+}
+
+fun main() {
+    println("Введите целые числа через пробел (например, 3 1244 32 199):")
+    val inputStr = readLine()?.trim() ?: ""
+    
+    // Проверка на пустую строку или пробелы
+    if (inputStr.isEmpty() || inputStr.isBlank()) {
+        println("Ошибка: Введена пустая строка или только пробелы.")
+        return
+    }
+
+    // Проверка на некорректные символы
+    if (!inputStr.all { it.isDigit() || it.isWhitespace() }) {
+        println("Ошибка: Ввод содержит недопустимые символы (только цифры и пробелы).")
+        return
+    }
+
+    val numbers = inputStr.split("\\s+".toRegex()).mapNotNull {
+        try {
+            it.toInt()
+        } catch (e: NumberFormatException) {
+            null
+        }
+    }
+    
+    if (numbers.isEmpty()) {
+        println("Ошибка: Не введено ни одного числа.")
+        return
+    }
+
+    val result = numbers.map { checkNumber(it) }
+
+    // Формат 1: строка
+    println("Результат (формат 1): ${result.joinToString(" ")}")
+
+    // Формат 2: столбец
+    println("Результат (формат 2):")
+    result.forEach { println(it) }
+}
+//Kotlin конец______________________________________________________
+
+//C# начало
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+class Program {
+    static bool IsValidDate(int day, int month) {
+        // Проверяет, является ли день (1–31) и месяц (1–12) корректными
+        return day >= 1 && day <= 31 && month >= 1 && month <= 12;
+    }
+
+    static string CheckNumber(int num) {
+        // Проверяет, можно ли вставить '/' в число для получения корректной даты
+        string numStr = num.ToString();
+        if (numStr[0] == '0' && numStr.Length > 1) {
+            return "NO";
+        }
+        int n = numStr.Length;
+        for (int i = 1; i < n; i++) {
+            string dayStr = numStr.Substring(0, i);
+            string monthStr = numStr.Substring(i);
+            if (dayStr[0] == '0') {
+                continue;
+            }
+            try {
+                int day = int.Parse(dayStr);
+                int month = int.Parse(monthStr);
+                if (IsValidDate(day, month)) {
+                    return "YES";
+                }
+            } catch {
+                continue;
+            }
+        }
+        return "NO";
+    }
+
+    static void Main() {
+        Console.WriteLine("Введите целые числа через пробел (например, 3 1244 32 199):");
+        string inputStr = Console.ReadLine()?.Trim() ?? "";
+
+        // Проверка на пустую строку или пробелы
+        if (string.IsNullOrWhiteSpace(inputStr)) {
+            Console.WriteLine("Ошибка: Введена пустая строка или только пробелы.");
+            return;
+        }
+
+        // Проверка на некорректные символы
+        if (!inputStr.All(c => char.IsDigit(c) || char.IsWhiteSpace(c))) {
+            Console.WriteLine("Ошибка: Ввод содержит недопустимые символы (только цифры и пробелы).");
+            return;
+        }
+
+        List<int> numbers;
+        try {
+            numbers = inputStr.Split().Select(int.Parse).ToList();
+            if (!numbers.Any()) {
+                Console.WriteLine("Ошибка: Не введено ни одного числа.");
+                return;
+            }
+        } catch {
+            Console.WriteLine("Ошибка: Введите корректные целые числа.");
+            return;
+        }
+
+        var result = numbers.Select(CheckNumber).ToList();
+
+        // Формат 1: строка
+        Console.WriteLine("Результат (формат 1): " + string.Join(" ", result));
+
+        // Формат 2: столбец
+        Console.WriteLine("Результат (формат 2):");
+        foreach (var res in result) {
+            Console.WriteLine(res);
+        }
+    }
+}
+//C# конец______________________________________________________
+
+//PHP начало
+<?php
+
+function is_valid_date($day, $month) {
+    // Проверяет, является ли день (1–31) и месяц (1–12) корректными
+    return $day >= 1 && $day <= 31 && $month >= 1 && $month <= 12;
+}
+
+function check_number($num) {
+    // Проверяет, можно ли вставить '/' в число для получения корректной даты
+    $num_str = (string)$num;
+    if ($num_str[0] === '0' && strlen($num_str) > 1) {
+        return "NO";
+    }
+    $n = strlen($num_str);
+    for ($i = 1; $i < $n; $i++) {
+        $day_str = substr($num_str, 0, $i);
+        $month_str = substr($num_str, $i);
+        if ($day_str[0] === '0') {
+            continue;
+        }
+        if (is_numeric($day_str) && is_numeric($month_str)) {
+            $day = (int)$day_str;
+            $month = (int)$month_str;
+            if (is_valid_date($day, $month)) {
+                return "YES";
+            }
+        }
+    }
+    return "NO";
+}
+
+echo "Введите целые числа через пробел (например, 3 1244 32 199):\n";
+$input_str = trim(fgets(STDIN));
+
+// Проверка на пустую строку или пробелы
+if (empty($input_str) || preg_match('/^\s+$/', $input_str)) {
+    echo "Ошибка: Введена пустая строка или только пробелы.\n";
+    exit(1);
+}
+
+// Проверка на некорректные символы
+if (!preg_match('/^[\d\s]+$/', $input_str)) {
+    echo "Ошибка: Ввод содержит недопустимые символы (только цифры и пробелы).\n";
+    exit(1);
+}
+
+$numbers = array_filter(array_map('intval', preg_split('/\s+/', $input_str)));
+if (empty($numbers)) {
+    echo "Ошибка: Не введено ни одного числа.\n";
+    exit(1);
+}
+
+$result = array_map('check_number', $numbers);
+
+// Формат 1: строка
+echo "Результат (формат 1): " . implode(" ", $result) . "\n";
+
+// Формат 2: столбец
+echo "Результат (формат 2):\n";
+foreach ($result as $res) {
+    echo "$res\n";
+}
+
+?>
+//PHP конец______________________________________________________
+
+//Rust начало
+use std::io;
+
+fn is_valid_date(day: i32, month: i32) -> bool {
+    // Проверяет, является ли день (1–31) и месяц (1–12) корректными
+    day >= 1 && day <= 31 && month >= 1 && month <= 12
+}
+
+fn check_number(num: i32) -> String {
+    // Проверяет, можно ли вставить '/' в число для получения корректной даты
+    let num_str = num.to_string();
+    if num_str.starts_with('0') && num_str.len() > 1 {
+        return "NO".to_string();
+    }
+    let n = num_str.len();
+    for i in 1..n {
+        let day_str = &num_str[..i];
+        let month_str = &num_str[i..];
+        if day_str.starts_with('0') {
+            continue;
+        }
+        if let (Ok(day), Ok(month)) = (day_str.parse::<i32>(), month_str.parse::<i32>()) {
+            if is_valid_date(day, month) {
+                return "YES".to_string();
+            }
+        }
+    }
+    "NO".to_string()
+}
+
+fn main() {
+    println!("Введите целые числа через пробел (например, 3 1244 32 199):");
+    let mut input_str = String::new();
+    match io::stdin().read_line(&mut input_str) {
+        Ok(_) => {
+            let input_str = input_str.trim();
+            // Проверка на пустую строку или пробелы
+            if input_str.is_empty() || input_str.chars().all(char::is_whitespace) {
+                println!("Ошибка: Введена пустая строка или только пробелы.");
+                return;
+            }
+
+            // Проверка на некорректные символы
+            if !input_str.chars().all(|c| c.is_digit(10) || c.is_whitespace()) {
+                println!("Ошибка: Ввод содержит недопустимые символы (только цифры и пробелы).");
+                return;
+            }
+
+            let numbers: Vec<i32> = input_str
+                .split_whitespace()
+                .filter_map(|s| s.parse::<i32>().ok())
+                .collect();
+
+            if numbers.is_empty() {
+                println!("Ошибка: Не введено ни одного числа.");
+                return;
+            }
+
+            let result: Vec<String> = numbers.into_iter().map(check_number).collect();
+
+            // Формат 1: строка
+            println!("Результат (формат 1): {}", result.join(" "));
+
+            // Формат 2: столбец
+            println!("Результат (формат 2):");
+            for res in result {
+                println!("{}", res);
+            }
+        }
+        Err(_) => println!("Ошибка: Не удалось прочитать ввод."),
+    }
+}
+//Rust конец______________________________________________________
+
+//Go начало
+package main
+
+import (
+    "bufio"
+    "fmt"
+    "os"
+    "strconv"
+    "strings"
+    "unicode"
+)
+
+func isValidDate(day, month int) bool {
+    // Проверяет, является ли день (1–31) и месяц (1–12) корректными
+    return day >= 1 && day <= 31 && month >= 1 && month <= 12
+}
+
+func checkNumber(num int) string {
+    // Проверяет, можно ли вставить '/' в число для получения корректной даты
+    numStr := fmt.Sprint(num)
+    if numStr[0] == '0' && len(numStr) > 1 {
+        return "NO"
+    }
+    n := len(numStr)
+    for i := 1; i < n; i++ {
+        dayStr := numStr[:i]
+        monthStr := numStr[i:]
+        if dayStr[0] == '0' {
+            continue
+        }
+        day, err1 := strconv.Atoi(dayStr)
+        month, err2 := strconv.Atoi(monthStr)
+        if err1 == nil && err2 == nil && isValidDate(day, month) {
+            return "YES"
+        }
+    }
+    return "NO"
+}
+
+func main() {
+    fmt.Println("Введите целые числа через пробел (например, 3 1244 32 199):")
+    scanner := bufio.NewScanner(os.Stdin)
+    scanner.Scan()
+    inputStr := strings.TrimSpace(scanner.Text())
+
+    // Проверка на пустую строку или пробелы
+    if inputStr == "" || strings.TrimSpace(inputStr) == "" {
+        fmt.Println("Ошибка: Введена пустая строка или только пробелы.")
+        return
+    }
+
+    // Проверка на некорректные символы
+    for _, r := range inputStr {
+        if !unicode.IsDigit(r) && !unicode.IsSpace(r) {
+            fmt.Println("Ошибка: Ввод содержит недопустимые символы (только цифры и пробелы).")
+            return
+        }
+    }
+
+    parts := strings.Fields(inputStr)
+    numbers := make([]int, 0)
+    for _, part := range parts {
+        if num, err := strconv.Atoi(part); err == nil {
+            numbers = append(numbers, num)
+        }
+    }
+
+    if len(numbers) == 0 {
+        fmt.Println("Ошибка: Не введено ни одного числа.")
+        return
+    }
+
+    result := make([]string, len(numbers))
+    for i, num := range numbers {
+        result[i] = checkNumber(num)
+    }
+
+    // Формат 1: строка
+    fmt.Println("Результат (формат 1):", strings.Join(result, " "))
+
+    // Формат 2: столбец
+    fmt.Println("Результат (формат 2):")
+    for _, res := range result {
+        fmt.Println(res)
+    }
+}
+//Go конец______________________________________________________
+
+//TypeScript начало
+import * as readline from 'readline';
+
+function isValidDate(day: number, month: number): boolean {
+    // Проверяет, является ли день (1–31) и месяц (1–12) корректными
+    return day >= 1 && day <= 31 && month >= 1 && month <= 12;
+}
+
+function checkNumber(num: number): string {
+    // Проверяет, можно ли вставить '/' в число для получения корректной даты
+    const numStr = num.toString();
+    if (numStr[0] === '0' && numStr.length > 1) {
+        return "NO";
+    }
+    const n = numStr.length;
+    for (let i = 1; i < n; i++) {
+        const dayStr = numStr.slice(0, i);
+        const monthStr = numStr.slice(i);
+        if (dayStr[0] === '0') {
+            continue;
+        }
+        try {
+            const day = parseInt(dayStr, 10);
+            const month = parseInt(monthStr, 10);
+            if (!isNaN(day) && !isNaN(month) && isValidDate(day, month)) {
+                return "YES";
+            }
+        } catch {
+            continue;
+        }
+    }
+    return "NO";
+}
+
+const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout
+});
+
+rl.question('Введите целые числа через пробел (например, 3 1244 32 199):\n', (inputStr: string) => {
+    const trimmed = inputStr.trim();
+
+    // Проверка на пустую строку или пробелы
+    if (!trimmed || /^\s+$/.test(trimmed)) {
+        console.log("Ошибка: Введена пустая строка или только пробелы.");
+        rl.close();
+        return;
+    }
+
+    // Проверка на некорректные символы
+    if (!/^[0-9\s]+$/.test(trimmed)) {
+        console.log("Ошибка: Ввод содержит недопустимые символы (только цифры и пробелы).");
+        rl.close();
+        return;
+    }
+
+    const numbers = trimmed.split(/\s+/).map(num => parseInt(num, 10)).filter(num => !isNaN(num));
+    if (numbers.length === 0) {
+        console.log("Ошибка: Не введено ни одного числа.");
+        rl.close();
+        return;
+    }
+
+    const result = numbers.map(checkNumber);
+
+    // Формат 1: строка
+    console.log("Результат (формат 1):", result.join(" "));
+
+    // Формат 2: столбец
+    console.log("Результат (формат 2):");
+    result.forEach(res => console.log(res));
+
+    rl.close();
+});
+//TypeScript конец______________________________________________________
+
+//Swift начало
+import Foundation
+
+func isValidDate(day: Int, month: Int) -> Bool {
+    // Проверяет, является ли день (1–31) и месяц (1–12) корректными
+    return day >= 1 && day <= 31 && month >= 1 && month <= 12
+}
+
+func checkNumber(_ num: Int) -> String {
+    // Проверяет, можно ли вставить '/' в число для получения корректной даты
+    let numStr = String(num)
+    if numStr.first == "0" && numStr.count > 1 {
+        return "NO"
+    }
+    let n = numStr.count
+    for i in 1..<n {
+        let dayStr = String(numStr.prefix(i))
+        let monthStr = String(numStr.dropFirst(i))
+        if dayStr.first == "0" {
+            continue
+        }
+        if let day = Int(dayStr), let month = Int(monthStr), isValidDate(day: day, month: month) {
+            return "YES"
+        }
+    }
+    return "NO"
+}
+
+print("Введите целые числа через пробел (например, 3 1244 32 199):")
+guard let inputStr = readLine()?.trimmingCharacters(in: .whitespaces) else {
+    print("Ошибка: Не удалось прочитать ввод.")
+    exit(1)
+}
+
+// Проверка на пустую строку или пробелы
+if inputStr.isEmpty || inputStr.allSatisfy({ $0.isWhitespace }) {
+    print("Ошибка: Введена пустая строка или только пробелы.")
+    exit(1)
+}
+
+// Проверка на некорректные символы
+if !inputStr.allSatisfy({ $0.isNumber || $0.isWhitespace }) {
+    print("Ошибка: Ввод содержит недопустимые символы (только цифры и пробелы).")
+    exit(1)
+}
+
+let numbers = inputStr.split(separator: " ").compactMap { Int($0) }
+if numbers.isEmpty {
+    print("Ошибка: Не введено ни одного числа.")
+    exit(1)
+}
+
+let result = numbers.map(checkNumber)
+
+// Формат 1: строка
+print("Результат (формат 1): \(result.joined(separator: " "))")
+
+// Формат 2: столбец
+print("Результат (формат 2):")
+result.forEach { print($0) }
+//Swift конец______________________________________________________
+
+//JavaScript начало
+const readline = require('readline');
+
+function isValidDate(day, month) {
+    // Проверяет, является ли день (1–31) и месяц (1–12) корректными
+    return day >= 1 && day <= 31 && month >= 1 && month <= 12;
+}
+
+function checkNumber(num) {
+    // Проверяет, можно ли вставить '/' в число для получения корректной даты
+    const numStr = num.toString();
+    if (numStr[0] === '0' && numStr.length > 1) {
+        return "NO";
+    }
+    const n = numStr.length;
+    for (let i = 1; i < n; i++) {
+        const dayStr = numStr.slice(0, i);
+        const monthStr = numStr.slice(i);
+        if (dayStr[0] === '0') {
+            continue;
+        }
+        const day = parseInt(dayStr, 10);
+        const month = parseInt(monthStr, 10);
+        if (!isNaN(day) && !isNaN(month) && isValidDate(day, month)) {
+            return "YES";
+        }
+    }
+    return "NO";
+}
+
+const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout
+});
+
+rl.question('Введите целые числа через пробел (например, 3 1244 32 199):\n', (inputStr) => {
+    const trimmed = inputStr.trim();
+
+    // Проверка на пустую строку или пробелы
+    if (!trimmed || /^\s+$/.test(trimmed)) {
+        console.log("Ошибка: Введена пустая строка или только пробелы.");
+        rl.close();
+        return;
+    }
+
+    // Проверка на некорректные символы
+    if (!/^[0-9\s]+$/.test(trimmed)) {
+        console.log("Ошибка: Ввод содержит недопустимые символы (только цифры и пробелы).");
+        rl.close();
+        return;
+    }
+
+    const numbers = trimmed.split(/\s+/).map(num => parseInt(num, 10)).filter(num => !isNaN(num));
+    if (numbers.length === 0) {
+        console.log("Ошибка: Не введено ни одного числа.");
+        rl.close();
+        return;
+    }
+
+    const result = numbers.map(checkNumber);
+
+    // Формат 1: строка
+    console.log("Результат (формат 1):", result.join(" "));
+
+    // Формат 2: столбец
+    console.log("Результат (формат 2):");
+    result.forEach(res => console.log(res));
+
+    rl.close();
+});
+//JavaScript конец______________________________________________________
+
+//Java начало
+import java.util.*;
+import java.util.stream.Collectors;
+
+public class Variant27 {
+    static boolean isValidDate(int day, int month) {
+        // Проверяет, является ли день (1–31) и месяц (1–12) корректными
+        return day >= 1 && day <= 31 && month >= 1 && month <= 12;
+    }
+
+    static String checkNumber(int num) {
+        // Проверяет, можно ли вставить '/' в число для получения корректной даты
+        String numStr = Integer.toString(num);
+        if (numStr.charAt(0) == '0' && numStr.length() > 1) {
+            return "NO";
+        }
+        int n = numStr.length();
+        for (int i = 1; i < n; i++) {
+            String dayStr = numStr.substring(0, i);
+            String monthStr = numStr.substring(i);
+            if (dayStr.charAt(0) == '0') {
+                continue;
+            }
+            try {
+                int day = Integer.parseInt(dayStr);
+                int month = Integer.parseInt(monthStr);
+                if (isValidDate(day, month)) {
+                    return "YES";
+                }
+            } catch (NumberFormatException e) {
+                continue;
+            }
+        }
+        return "NO";
+    }
+
+    public static void main(String[] args) {
+        System.out.println("Введите целые числа через пробел (например, 3 1244 32 199):");
+        Scanner scanner = new Scanner(System.in);
+        String inputStr = scanner.nextLine().trim();
+
+        // Проверка на пустую строку или пробелы
+        if (inputStr.isEmpty() || inputStr.matches("\\s+")) {
+            System.out.println("Ошибка: Введена пустая строка или только пробелы.");
+            scanner.close();
+            return;
+        }
+
+        // Проверка на некорректные символы
+        if (!inputStr.matches("[0-9\\s]+")) {
+            System.out.println("Ошибка: Ввод содержит недопустимые символы (только цифры и пробелы).");
+            scanner.close();
+            return;
+        }
+
+        List<Integer> numbers;
+        try {
+            numbers = Arrays.stream(inputStr.split("\\s+"))
+                           .map(Integer::parseInt)
+                           .collect(Collectors.toList());
+            if (numbers.isEmpty()) {
+                System.out.println("Ошибка: Не введено ни одного числа.");
+                scanner.close();
+                return;
+            }
+        } catch (NumberFormatException e) {
+            System.out.println("Ошибка: Введите корректные целые числа.");
+            scanner.close();
+            return;
+        }
+
+        List<String> result = numbers.stream().map(Variant27::checkNumber).collect(Collectors.toList());
+
+        // Формат 1: строка
+        System.out.println("Результат (формат 1): " + String.join(" ", result));
+
+        // Формат 2: столбец
+        System.out.println("Результат (формат 2):");
+        result.forEach(System.out::println);
+
+        scanner.close();
+    }
+}
+//Java конец______________________________________________________
+
+//Ruby начало
+def is_valid_date(day, month)
+  // Проверяет, является ли день (1–31) и месяц (1–12) корректными
+  day >= 1 && day <= 31 && month >= 1 && month <= 12
+end
+
+def check_number(num)
+  // Проверяет, можно ли вставить '/' в число для получения корректной даты
+  num_str = num.to_s
+  return "NO" if num_str[0] == '0' && num_str.length > 1
+  n = num_str.length
+  (1...n).each do |i|
+    day_str = num_str[0...i]
+    month_str = num_str[i..-1]
+    next if day_str[0] == '0'
+    begin
+      day = day_str.to_i
+      month = month_str.to_i
+      return "YES" if is_valid_date(day, month)
+    rescue
+      next
+    end
+  end
+  "NO"
+end
+
+puts "Введите целые числа через пробел (например, 3 1244 32 199):"
+input_str = gets&.strip || ""
+
+# Проверка на пустую строку или пробелы
+if input_str.empty? || input_str.match?(/^\s+$/)
+  puts "Ошибка: Введена пустая строка или только пробелы."
+  exit 1
+end
+
+# Проверка на некорректные символы
+unless input_str.match?(/^[0-9\s]+$/)
+  puts "Ошибка: Ввод содержит недопустимые символы (только цифры и пробелы)."
+  exit 1
+end
+
+numbers = input_str.split.map { |s| s.to_i rescue nil }.compact
+if numbers.empty?
+  puts "Ошибка: Не введено ни одного числа."
+  exit 1
+end
+
+result = numbers.map { |num| check_number(num) }
+
+// Формат 1: строка
+puts "Результат (формат 1): #{result.join(" ")}"
+
+// Формат 2: столбец
+puts "Результат (формат 2):"
+result.each { |res| puts res }
+//Ruby конец______________________________________________________
